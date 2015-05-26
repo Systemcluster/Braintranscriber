@@ -61,9 +61,11 @@ int main(int argc, const char * argv[]) {
         }
         // Brainfuck mode
         if(mode & BF) {
+            const char* pc {argv[argc-1]};
+            const char* pm {argv[argc-1]+strlen(argv[argc-1])};
             // Translate Brainfuck to Ook!
             if(mode & TR) {
-                for(const char* pc {argv[argc-1]}; pc < argv[argc-1]+strlen(argv[argc-1]); ++pc) {
+                for(; pc < pm; ++pc) {
                     switch(*pc) {
                         case '>': std::cout << "Ook. Ook? "; break;
                         case '<': std::cout << "Ook? Ook. "; break;
@@ -82,7 +84,7 @@ int main(int argc, const char * argv[]) {
                 std::stack<const char*> stack;
                 std::vector<char> mem (30000);
                 char* mc = &(mem[0]);
-                for(const char* pc {argv[argc-1]}; pc < argv[argc-1]+strlen(argv[argc-1]); ++pc) {
+                for(; pc < pm; ++pc) {
                     switch(*pc) {
                         case '>':
                             ++mc;
@@ -131,9 +133,11 @@ int main(int argc, const char * argv[]) {
         }
         // Ook! mode
         else if(mode & OO) {
+            const char* pc {argv[argc-1]};
+            const char* pm {argv[argc-1]+strlen(argv[argc-1])-9};
             // Translate Ook! to Brainfuck
             if(mode & TR) {
-                for(const char* pc {argv[argc-1]}; pc < argv[argc-1]+strlen(argv[argc-1]) - 9; pc+=9) {
+                for(; pc < pm; pc+=9) {
                     if(!strncmp("Ook. Ook?", pc, 9)) std::cout << '>'; else
                     if(!strncmp("Ook? Ook.", pc, 9)) std::cout << '<'; else
                     if(!strncmp("Ook. Ook.", pc, 9)) std::cout << '+'; else
@@ -150,7 +154,7 @@ int main(int argc, const char * argv[]) {
                 std::stack<const char*> stack;
                 std::vector<char> mem (30000);
                 char* mc = &(mem[0]);
-                for(const char* pc {argv[argc-1]}; pc < argv[argc-1]+strlen(argv[argc-1]) - 9; pc+=9) {
+                for(; pc < pm; pc+=9) {
                     if(!strncmp("Ook. Ook?", pc, 9)) {
                         ++mc;
                         if(mc>&(*(mem.rbegin()))) {
