@@ -1,8 +1,8 @@
-#Braintranscriber
+# Braintranscriber
 
 Brainfuck and Ook! interpterer and translator.
 
-##Description
+## Description
 
 The interpreter uses signed 8 bit cells, wrapping in both directions.
 
@@ -10,7 +10,7 @@ The tape is unbounded to the right and bounded to the left at position zero.
 
 Cells remain untouched on EOF.
 
-##Usage
+## Usage
 
 ```
 bt [-options] [Brainfuck/Ook! code/path]
@@ -34,7 +34,7 @@ To run one of the examples:
 ```
 
 
-##License
+## License
 
 This software is licensed under the zlib/libpng license.
 See `LICENSE` in the project root directory for details.
