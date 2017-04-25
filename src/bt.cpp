@@ -27,6 +27,10 @@
 #include <vector>
 #include <stack>
 
+#include <fstream>
+#include <streambuf>
+#include <string>
+
 int main(int argc, const char * argv[]) {
     enum modes {
         BF = 0x00000001,
@@ -38,13 +42,14 @@ int main(int argc, const char * argv[]) {
     
     // No arguments given, just output info
     if(argc == 1) {
-        std::cout << "Braintranscriber (1.0)\n";
-        std::cout << "Copyright (c) 2014 Christian Sdunek\n";
-        std::cout << "bt [-options] [Brainfuck/Ook code]\n";
+        std::cout << "Braintranscriber (1.1)\n";
+        std::cout << "\n";
+        std::cout << "bt [-options] [Brainfuck/Ook! code/path]\n";
         std::cout << "  -b\tinterpret Brainfuck (default)\n";
         std::cout << "  -o\tinterpret Ook!\n";
         std::cout << "  -i\trun interpreted code (default)\n";
-        std::cout << "  -t\ttranslate Brainfuck to Ook and vice versa";
+        std::cout << "  -t\ttranslate Brainfuck to Ook or vice versa\n";
+        std::cout << "  -f\tread code from file";
     }
     else {
         // Parse commandline arguments
@@ -57,6 +62,14 @@ int main(int argc, const char * argv[]) {
                 mode = (mode | IN) & ~TR; else
             if(!strcmp(argv[a], "-t"))
                 mode = (mode | TR) & ~IN; else
+            if(!strcmp(argv[a], "-f")) {
+                std::ifstream ifile(argv[argc-1]);
+                if(!ifile) {
+                    std::cout << "File not found: " << argv[argc-1] << std::endl;
+                    return -1;
+                }
+                argv[argc-1] = std::string{(std::istreambuf_iterator<char>(ifile)), std::istreambuf_iterator<char>()}.c_str();
+            } else
             std::cout << "Unrecognized argument: " << argv[a] << std::endl;
         }
         // Brainfuck mode
