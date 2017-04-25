@@ -84,6 +84,7 @@ int main(int argc, const char * argv[]) {
                 std::stack<const char*> stack;
                 std::vector<char> mem (30000);
                 char* mc = &(mem[0]);
+                char rdbuf;
                 for(; pc < pm; ++pc) {
                     switch(*pc) {
                         case '>':
@@ -124,7 +125,10 @@ int main(int argc, const char * argv[]) {
                             std::cout << *mc;
                         break;
                         case ',':
-                            *mc = std::cin.get();
+                            rdbuf = std::cin.get();
+                            if(!std::cin.eof()) {
+                                *mc = rdbuf;
+                            }
                         break;
                         default: break;
                     }
@@ -154,6 +158,7 @@ int main(int argc, const char * argv[]) {
                 std::stack<const char*> stack;
                 std::vector<char> mem (30000);
                 char* mc = &(mem[0]);
+                char rdbuf;
                 for(; pc < pm; pc+=9) {
                     if(!strncmp("Ook. Ook?", pc, 9)) {
                         ++mc;
@@ -199,7 +204,10 @@ int main(int argc, const char * argv[]) {
                         std::cout << *mc;
                     } else
                     if(!strncmp("Ook. Ook!", pc, 9)) {
-                        *mc = std::cin.get();
+                        rdbuf = std::cin.get();
+                        if(!std::cin.eof()) {
+                            *mc = rdbuf;
+                        }
                     }
                     else pc-=8;
                 }
