@@ -39,10 +39,11 @@ int main(int argc, const char * argv[]) {
         TR = 0x10000000,
     };
     int mode = BF | IN;
-    
+    std::string code;
+
     // No arguments given, just output info
     if(argc == 1) {
-        std::cout << "Braintranscriber (1.1)\n";
+        std::cout << "Braintranscriber (1.2)\n";
         std::cout << "\n";
         std::cout << "bt [-options] [Brainfuck/Ook! code/path]\n";
         std::cout << "  -b\tinterpret Brainfuck (default)\n";
@@ -68,14 +69,22 @@ int main(int argc, const char * argv[]) {
                     std::cout << "File not found: " << argv[argc-1] << std::endl;
                     return -1;
                 }
-                argv[argc-1] = std::string{(std::istreambuf_iterator<char>(ifile)), std::istreambuf_iterator<char>()}.c_str();
+                code = std::string{(std::istreambuf_iterator<char>(ifile)), std::istreambuf_iterator<char>()};
+                if(code.empty()) {
+                    std::cout << "File empty: " << argv[argc-1] << std::endl;
+                    return -1;
+                }
             } else
             std::cout << "Unrecognized argument: " << argv[a] << std::endl;
         }
+        if(code.empty()) {
+            code = argv[argc - 1];
+        }
+
         // Brainfuck mode
         if(mode & BF) {
-            const char* pc {argv[argc-1]};
-            const char* pm {argv[argc-1]+strlen(argv[argc-1])};
+            const char* pc {code.c_str()};
+            const char* pm {code.c_str()+code.length()};
             // Translate Brainfuck to Ook!
             if(mode & TR) {
                 for(; pc < pm; ++pc) {
@@ -148,10 +157,11 @@ int main(int argc, const char * argv[]) {
                 }
             }
         }
+
         // Ook! mode
         else if(mode & OO) {
-            const char* pc {argv[argc-1]};
-            const char* pm {argv[argc-1]+strlen(argv[argc-1])-9};
+            const char* pc {code.c_str()};
+            const char* pm {code.c_str()+code.length()};
             // Translate Ook! to Brainfuck
             if(mode & TR) {
                 for(; pc < pm; pc+=9) {
@@ -227,6 +237,7 @@ int main(int argc, const char * argv[]) {
             }
         }
     }
+
     std::cout << std::endl;
     return 0;
 }
