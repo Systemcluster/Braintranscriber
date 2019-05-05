@@ -133,7 +133,7 @@ int main(int argc, const char * argv[]) {
                             else {
                                 size_t in {0};
                                 ++pc;
-                                for(; *pc != ']' || in > 0; ++pc) {
+                                for(; pc < pm && (*pc != ']' || in > 0); ++pc) {
                                     if(*pc == '[') ++in;
                                     else if(*pc == ']') --in;
                                 }
@@ -182,7 +182,10 @@ int main(int argc, const char * argv[]) {
                 std::vector<char> mem (30000);
                 char* mc = &(mem[0]);
                 char rdbuf;
-                for(; pc < pm; pc+=9) {
+                for(; pc+9 < pm; pc+=9) {
+                    while(*pc == ' ' && pc < pm) {
+                        pc+=1;
+                    }
                     if(!strncmp("Ook. Ook?", pc, 9)) {
                         ++mc;
                         if(mc>&(*(mem.rbegin()))) {
@@ -207,7 +210,11 @@ int main(int argc, const char * argv[]) {
                         else {
                             size_t in {0};
                             pc+=9;
-                            for(; strncmp(pc, "Ook? Ook!", 9) || in > 0; pc+=9) {
+                            for(; pc+9 < pm; pc+=9) {
+                                while(*pc == ' ' && pc < pm) {
+                                    pc+=1;
+                                }
+                                if(!strncmp(pc, "Ook? Ook!", 9) && in <= 0) break;
                                 if(!strncmp(pc, "Ook? Ook!", 9)) ++in;
                                 else if(!strncmp(pc, "Ook? Ook!", 9)) --in;
                                 else if(strncmp("Ook. Ook?", pc, 9) &&
